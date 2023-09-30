@@ -1,0 +1,17 @@
+name: More-command
+version: '${project.version}'
+main: spigotmc.ru.morecommand.More_command
+api-version: 1.14
+commands:
+  mc:
+    description: Основная команда плагина
+  gm:
+    description: меняет режим игры
+  heal:
+    description: Полное востоновление здоровья игрока
+  feed:
+    description: Полное востоновление голода
+  bc:
+    description: Обьявление на весь сервер
+  flyeffect:
+    description: Пошутить над игроком левитацией
