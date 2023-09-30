@@ -1,10 +1,6 @@
 package spigotmc.ru.morecommand;
 
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
@@ -20,7 +16,6 @@ import spigotmc.ru.morecommand.tools.UpdateChecker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 
@@ -35,8 +30,7 @@ public class More_command extends JavaPlugin implements Listener {
 
     private String user;
 
-
-
+    String configVersion = getConfig().getString("version");
 
 
 
@@ -50,6 +44,7 @@ public class More_command extends JavaPlugin implements Listener {
             saveDefaultConfig();
         }
 
+
         new UpdateChecker(this, 109520).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
                 getLogger().info("There is not a new update available.");
@@ -61,12 +56,28 @@ public class More_command extends JavaPlugin implements Listener {
 
 
 
+        String requiredVersion = "1.7"; // Минимальная требуемая версия конфига
+
+        if (configVersion == null || !configVersion.equals(requiredVersion)) {
+            // Обработка, если версия конфига не соответствует требуемой
+            getLogger().info("Outdated config.yml! Creating a new!");
+            this.ConfigFile = new File(this.getDataFolder(), "config.yml");
+            this.ConfigFile.renameTo(new File(this.getDataFolder(), "config.yml.old"));
+            this.saveResource("config.yml", false);
+        } else {
+            // Обработка, если версия конфига соответствует требуемой
+            getLogger().info("The config.yml file is not outdated yet.");
+        }
+
+
+
+
         getCommand("feed").setExecutor(new FeedCommand(this));
         getCommand("heal").setExecutor(new HealCommand(this));
         getCommand("bc").setExecutor(new BCcommand(this));
         getCommand("flyeffect").setExecutor(new Flyeffect(this));
         getCommand("mc").setExecutor(new MainCommand(this));
-        getCommand("gm").setExecutor(new GMCommand(this));
+        //getCommand("gm").setExecutor(new GMCommand(this));
         this.getServer().getPluginManager().registerEvents(this, this);
 
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.feed")));
@@ -78,7 +89,7 @@ public class More_command extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.flyeffect.others")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.reload")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.help")));
-        this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.moder")));
+        //this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.gm")));
         this.getServer().getPluginManager().addPermission(new Permission("more-command.update"));
 
 
@@ -87,20 +98,24 @@ public class More_command extends JavaPlugin implements Listener {
     }
 
 
+
+
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
 
-        if (getConfig().getBoolean("settings.update-check")){
+        if (getConfig().getBoolean("setting.update-check")){
             // Проверяем, есть ли у игрока права на обновление плагина
             if (player.hasPermission("more-command.update")) {
                 new UpdateChecker(this, 109520).getVersion(version -> {
                     if (getDescription().getVersion().equals(version)) {
 
                     } else {
-                        player.sendMessage(ChatColor.DARK_GREEN + "[More-command] " + ChatColor.GREEN + "A new version of the plugin has been released. version: " + version);
-                        player.sendMessage(ChatColor.GOLD + "Download - https://www.spigotmc.org/resources/more-command.109520/");
+
+                        player.sendMessage(getConfig().getString("new-version").replace("%version%", version).replace("&", "§"));
+                        //player.sendMessage(ChatColor.GOLD + "Download - https://www.spigotmc.org/resources/more-command.109520/".replace("&", "§"));
                     }
                 });
             }
@@ -129,5 +144,7 @@ public class More_command extends JavaPlugin implements Listener {
         }
 
     }
+
+
 
 }

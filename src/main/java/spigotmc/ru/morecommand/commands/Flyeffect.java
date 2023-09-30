@@ -50,50 +50,52 @@ public class Flyeffect implements CommandExecutor {
         //}
 
         //return false;
-
-        if(!sender.hasPermission(plugin.getConfig().getString("permissions.flyeffect"))) {
-            String s = ChatColor.translateAlternateColorCodes('&',
-                    plugin.getConfig().getString("messages.NoPermisioneffectfly"));
-            sender.sendMessage(s);
-            return true;
-        }
-        if(args.length == 0) {
-            if(!(sender instanceof Player)){
+        if (plugin.getConfig().getBoolean("setting.flyeffect")) {
+            if(!sender.hasPermission(plugin.getConfig().getString("permissions.flyeffect"))) {
                 String s = ChatColor.translateAlternateColorCodes('&',
-                        plugin.getConfig().getString("messages.NoPermisionflyeffectconsole"));
+                        plugin.getConfig().getString("messages.NoPermisioneffectfly"));
                 sender.sendMessage(s);
                 return true;
-            } else {
-                Player p = (Player) sender;
-                PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, 90*2, 12);
-                String s = ChatColor.translateAlternateColorCodes('&',
-                        plugin.getConfig().getString("messages.flyeffect"));
-                        p.addPotionEffect(effect);
-                sender.sendMessage(s);
             }
-        } else {
-            if(sender.hasPermission(plugin.getConfig().getString("permissions.flyeffect.others"))) {
-                Player p = Bukkit.getPlayerExact(args[0]);
-                if(p == null) {
+            if(args.length == 0) {
+                if(!(sender instanceof Player)){
                     String s = ChatColor.translateAlternateColorCodes('&',
-                            plugin.getConfig().getString("messages.dontplayerflyeffect"));
+                            plugin.getConfig().getString("messages.NoPermisionflyeffectconsole"));
                     sender.sendMessage(s);
-                    return false;
-                }
-                if(p == sender) {
+                    return true;
+                } else {
+                    Player p = (Player) sender;
                     PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, 90*2, 12);
                     String s = ChatColor.translateAlternateColorCodes('&',
                             plugin.getConfig().getString("messages.flyeffect"));
-                            p.addPotionEffect(effect);
+                    p.addPotionEffect(effect);
                     sender.sendMessage(s);
-                    return true;
                 }
-                PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, 90*2, 12);
-                p.addPotionEffect(effect);
-                String s = ChatColor.translateAlternateColorCodes('&',
-                        plugin.getConfig().getString("messages.flyeffect"));
-                sender.sendMessage(s);
+            } else {
+                if(sender.hasPermission(plugin.getConfig().getString("permissions.flyeffect.others"))) {
+                    Player p = Bukkit.getPlayerExact(args[0]);
+                    if(p == null) {
+                        String s = ChatColor.translateAlternateColorCodes('&',
+                                plugin.getConfig().getString("messages.dontplayerflyeffect"));
+                        sender.sendMessage(s);
+                        return false;
+                    }
+                    if(p == sender) {
+                        PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, 90*2, 12);
+                        String s = ChatColor.translateAlternateColorCodes('&',
+                                plugin.getConfig().getString("messages.flyeffect"));
+                        p.addPotionEffect(effect);
+                        sender.sendMessage(s);
+                        return true;
+                    }
+                    PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION, 90*2, 12);
+                    p.addPotionEffect(effect);
+                    String s = ChatColor.translateAlternateColorCodes('&',
+                            plugin.getConfig().getString("messages.flyeffect"));
+                    sender.sendMessage(s);
+                }
             }
+            return true;
         }
 
 

@@ -18,33 +18,31 @@ public class BCcommand implements CommandExecutor {
     }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(!(sender instanceof Player)){
-            String s = ChatColor.translateAlternateColorCodes('&',
-                    plugin.getConfig().getString("messages.NoPermisionbcconsole"));
-            sender.sendMessage(s);
+        if (plugin.getConfig().getBoolean("setting.bc")) {
+            Player player = (Player) sender;
+            if (!player.hasPermission(plugin.getConfig().getString("permissions.bc"))) {
+                String s = ChatColor.translateAlternateColorCodes('&',
+                        plugin.getConfig().getString("messages.NoPermisionbc"));
+                sender.sendMessage(s);
+                return true;
+            }
+
+            if (args.length == 0) {
+                String s = ChatColor.translateAlternateColorCodes('&',
+                        plugin.getConfig().getString("messages.Dontmessagebc"));
+                sender.sendMessage(s);
+                return true;
+            }
+
+            String message = String.join(" ", args);
+
+
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+                    plugin.getConfig().getString("messages.bc-message") + message).replace("%player_name%", player.getName()));
+
             return true;
+
         }
-
-        Player player = (Player) sender;
-        if (!player.hasPermission(plugin.getConfig().getString("permissions.bc"))) {
-            String s = ChatColor.translateAlternateColorCodes('&',
-                    plugin.getConfig().getString("messages.NoPermisionbc"));
-            sender.sendMessage(s);
-            return true;
-        }
-
-        if (args.length == 0) {
-            String s = ChatColor.translateAlternateColorCodes('&',
-                    plugin.getConfig().getString("messages.Dontmessagebc"));
-            sender.sendMessage(s);
-            return true;
-        }
-
-        String message = String.join(" ", args);
-
-
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
-                "&eОбьявление: &7" + message));
 
         return true;
 

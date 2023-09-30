@@ -1,5 +1,16 @@
-version: 1.6 #Пожалуйста не трогайте эту строчку!
+version: 1.7 #Пожалуйста не трогайте эту строчку!
 
+new-version: '&a[More-command] A new version of the plugin has been released. version: %version% &6Download - https://www.spigotmc.org/resources/more-command.109520/ '
+
+# в этом разделе вы можете отключать функции плагина
+setting:
+  heal: true
+  feed: true
+  bc: true
+  flyeffect: true
+  update-check: true
+
+# здесь все сообщения из плагина
 messages:
   heal: '&aВы были вылечены!'
   dontplayerheal: '&cИгрок не найден!'
@@ -9,30 +20,19 @@ messages:
   NoPermisionfeed: '&cУ вас нет прав!'
   NoPermisionconsole: '&cЭту команду могут использовать только игроки!'
   dontplayerfeed: '&cИгрок не найден!'
+  bc-message: '&eОбьявление&7 %player_name%: '
   NoPermisionbc: '&cУ вас нет прав!'
-  NoPermisionbcconsole: '&cУ вас нет прав!'
   Dontmessagebc: '&cПожалуйста напишите хотябы одну букву!'
   flyeffect: 'Ой! Пора в полет!'
   dontplayerflyeffect: '&cИгрок не найден!'
   NoPermisioneffectfly: '&cУ вас нет прав!'
   NoPermisionflyeffectconsole: '&cЭту команду могут использовать только игроки!'
   NoPermisionhelp: '&cУ вас нет прав!'
-  NoPermisionmoder: '&cУ вас нет прав!'
 plugin:
   Reloadplugin: '&aПлагин перезагружен!'
   NoPermisionreload: '&cУ вас нет прав!'
 
-moder:
-  message:
-    on: 'f'
-    off: 'd'
-  bc:
-    on: '&aMore-command &7| Игрок %player'
-    off: '&c'
-  job:
-    on: "lp user %player% parent add moder-on"
-    off: 'lp user %player% parent remove moder-off'
-
+# здесь вы можете настроить все права команд
 permissions:
   feed: 'more-command.feed'
   feed.others: 'more-command.feed.others'
@@ -43,7 +43,3 @@ permissions:
   reload: 'more-command.reload'
   flyeffect: 'more-command.flyeffect'
   flyeffect.others: 'more-command.flyeffect.others'
-  moder: 'more-command.moder.use'
-broadcast:
-  start: '%player'
-
