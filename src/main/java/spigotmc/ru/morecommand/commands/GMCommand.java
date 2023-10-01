@@ -1,6 +1,7 @@
 package spigotmc.ru.morecommand.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,42 +17,51 @@ public class GMCommand implements CommandExecutor {
         this.plugin = plugin;
     }
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (command.getName().equalsIgnoreCase("gm")) {
-            if (args.length < 2) {
-                return false;
+        if (plugin.getConfig().getBoolean("setting.gm")){
+            if(!sender.hasPermission(plugin.getConfig().getString("permissions.gm"))) {
+                String s = ChatColor.translateAlternateColorCodes('&',
+                        plugin.getConfig().getString("messages.NoPermisiongm"));
+                sender.sendMessage(s);
+                return true;
+            }
+            if(args.length == 0) {
+                sender.sendMessage("/gm (0/1/2/3)");
+                return true;
             }
 
-            GameMode gameMode;
-            try {
-                int mode = Integer.parseInt(args[0]);
-                gameMode = getGameMode(mode);
-            } catch (NumberFormatException e) {
-                sender.sendMessage("Неправильный формат режима игры!");
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getConfig().getString("messages.NopermissionConsolegm").replace("&", "§"));
                 return true;
             }
 
             Player player;
-            if (args[1].equalsIgnoreCase("@a")) { // Знак @a указывает на всех игроков сервера
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.setGameMode(gameMode);
-                }
-                sender.sendMessage("Режим игры изменен для всех игроков!");
-            } else {
+            if (args.length > 1) {
                 player = Bukkit.getPlayer(args[1]);
-                if (player == sender) {
-                    sender.sendMessage("Игрок " + args[1] + " не найден!");
-                    return true;
-                }
-                player.setGameMode(gameMode);
-                sender.sendMessage("Режим игры изменен для игрока " + player.getName() + "!");
+            } else {
+                player = (Player) sender;
             }
+
+            if (player == null) {
+                sender.sendMessage(plugin.getConfig().getString("messages.gmdontplayer").replace("&", "§"));
+                return true;
+            }
+
+            GameMode gameMode;
+            try {
+                gameMode = GameMode.getByValue(Integer.parseInt(args[0]));
+            } catch (NumberFormatException e) {
+                sender.sendMessage("Invalid game mode.");
+                return true;
+            }
+
+            player.setGameMode(gameMode);
+            player.sendMessage(plugin.getConfig().getString("messages.gm").replace("%gamemode%", gameMode.toString()).replace("&", "§").replace("%player_name%", player.getName()));
             return true;
         }
         return false;
     }
 
-    private GameMode getGameMode(int mode) {
+    private GameMode gameMode(int mode) {
         switch (mode) {
             case 0:
                 return GameMode.SURVIVAL;

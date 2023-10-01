@@ -6,7 +6,7 @@
 
     <groupId>spigotmc.org</groupId>
     <artifactId>More-command</artifactId>
-    <version>1.6.1.2</version>
+    <version>1.6.1.3</version>
     <packaging>jar</packaging>
 
     <name>More-commands</name>

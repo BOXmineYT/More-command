@@ -56,7 +56,7 @@ public class More_command extends JavaPlugin implements Listener {
 
 
 
-        String requiredVersion = "1.7"; // Минимальная требуемая версия конфига
+        String requiredVersion = "1.8"; // Минимальная требуемая версия конфига
 
         if (configVersion == null || !configVersion.equals(requiredVersion)) {
             // Обработка, если версия конфига не соответствует требуемой
@@ -77,7 +77,7 @@ public class More_command extends JavaPlugin implements Listener {
         getCommand("bc").setExecutor(new BCcommand(this));
         getCommand("flyeffect").setExecutor(new Flyeffect(this));
         getCommand("mc").setExecutor(new MainCommand(this));
-        //getCommand("gm").setExecutor(new GMCommand(this));
+        getCommand("gm").setExecutor(new GMCommand(this));
         this.getServer().getPluginManager().registerEvents(this, this);
 
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.feed")));
@@ -89,7 +89,7 @@ public class More_command extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.flyeffect.others")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.reload")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.help")));
-        //this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.gm")));
+        this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.gm")));
         this.getServer().getPluginManager().addPermission(new Permission("more-command.update"));
 
 

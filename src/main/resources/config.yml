@@ -1,4 +1,4 @@
-version: 1.7 #Пожалуйста не трогайте эту строчку!
+version: 1.8 #Пожалуйста не трогайте эту строчку!
 
 new-version: '&a[More-command] A new version of the plugin has been released. version: %version% &6Download - https://www.spigotmc.org/resources/more-command.109520/ '
 
@@ -8,6 +8,7 @@ setting:
   feed: true
   bc: true
   flyeffect: true
+  gm: true
   update-check: true
 
 # здесь все сообщения из плагина
@@ -28,6 +29,10 @@ messages:
   NoPermisioneffectfly: '&cУ вас нет прав!'
   NoPermisionflyeffectconsole: '&cЭту команду могут использовать только игроки!'
   NoPermisionhelp: '&cУ вас нет прав!'
+  gm: '&eРежим игры был изменен %player_name% на %gamemode%'
+  gmdontplayer: '&cИгрок не найден!'
+  NopermissionConsolegm: '&cЭта команда доступна только игрокам'
+  NoPermisiongm: '&cУ вас нет прав!'
 plugin:
   Reloadplugin: '&aПлагин перезагружен!'
   NoPermisionreload: '&cУ вас нет прав!'
@@ -43,3 +48,4 @@ permissions:
   reload: 'more-command.reload'
   flyeffect: 'more-command.flyeffect'
   flyeffect.others: 'more-command.flyeffect.others'
+  gm: 'more-command.gm'

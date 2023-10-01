@@ -7,6 +7,8 @@ commands:
     description: Основная команда плагина
   heal:
     description: Полное востоновление здоровья игрока
+  gm:
+    description: Мненяет режим игры
   feed:
     description: Полное востоновление голода
   bc:
