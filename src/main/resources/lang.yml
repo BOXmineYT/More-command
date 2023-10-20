@@ -1,19 +1,6 @@
-ru:
-
 en:
-  heal: '&4Вы были вылечены!'
-  dontplayerheal: '&cИгрок не найден!'
-  NoPermisionheal: '&3У вас нет прав!'
-  NoPermisionhealconsole: '&cЭту команду могут использовать только игроки!'
-  feed: '&aВы были накормлены!'
-  NoPermisionfeed: '&cУ вас нет прав!'
-  NoPermisionconsole: '&cЭту команду могут использовать только игроки!'
-  dontplayerfeed: '&cИгрок не найден!'
-  NoPermisionbc: '&cУ вас нет прав!'
-  NoPermisionbcconsole: '&cУ вас нет прав!'
-  Dontmessagebc: '&cПожалуйста напишите хотябы одну букву!'
-  flyeffect: 'Ой! Пора в полет!'
-  dontplayerflyeffect: '&cИгрок не найден!'
-  NoPermisioneffectfly: '&cУ вас нет прав!'
-  NoPermisionflyeffectconsole: '&cЭту команду могут использовать только игроки!'
-  NoPermisionhelp: '&cУ вас нет прав!'
+  welcomeMessage: "&aWelcome to the server!"
+  goodbyeMessage: "&cGoodbye!"
+ru:
+  welcomeMessage: "&aДобро пожаловать на сервер!"
+  goodbyeMessage: "&cДо свидания!"

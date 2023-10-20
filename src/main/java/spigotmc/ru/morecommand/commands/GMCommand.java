@@ -50,7 +50,12 @@ public class GMCommand implements CommandExecutor {
             try {
                 gameMode = GameMode.getByValue(Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
-                sender.sendMessage("Invalid game mode.");
+                sender.sendMessage(plugin.getConfig().getString("messages.gmdongame").replace("&", "§"));
+                return true;
+            }
+            int mode = Integer.parseInt(args[0]);
+            if (mode >= 4) {
+                sender.sendMessage(plugin.getConfig().getString("messages.gmdongame").replace("&", "§"));
                 return true;
             }
 
@@ -59,20 +64,5 @@ public class GMCommand implements CommandExecutor {
             return true;
         }
         return false;
-    }
-
-    private GameMode gameMode(int mode) {
-        switch (mode) {
-            case 0:
-                return GameMode.SURVIVAL;
-            case 1:
-                return GameMode.CREATIVE;
-            case 2:
-                return GameMode.ADVENTURE;
-            case 3:
-                return GameMode.SPECTATOR;
-            default:
-                throw new IllegalArgumentException("Недопустимый режим игры!");
-        }
     }
 }

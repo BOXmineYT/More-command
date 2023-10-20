@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import spigotmc.ru.morecommand.commands.*;
-import spigotmc.ru.morecommand.tools.Languages;
+import spigotmc.ru.morecommand.tools.LanguageManager;
 import spigotmc.ru.morecommand.tools.UpdateChecker;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class More_command extends JavaPlugin implements Listener {
+public class More_command extends JavaPlugin implements Listener  {
 
 
     private final List<Block> lastTrapdoors = new ArrayList();
-    private Languages languages;
+
     public static JavaPlugin instance;
     private File ConfigFile;
     java.util.logging.Logger log = Logger.getLogger("Minecraft");
@@ -37,6 +37,10 @@ public class More_command extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+
+
+
+
         File config = new File(getDataFolder() + File.separator + "config.yml");
         if(!config.exists()){
             getLogger().info("Creating config....");
@@ -56,7 +60,7 @@ public class More_command extends JavaPlugin implements Listener {
 
 
 
-        String requiredVersion = "1.8"; // Минимальная требуемая версия конфига
+        String requiredVersion = "1.9"; // Минимальная требуемая версия конфига
 
         if (configVersion == null || !configVersion.equals(requiredVersion)) {
             // Обработка, если версия конфига не соответствует требуемой
@@ -95,39 +99,27 @@ public class More_command extends JavaPlugin implements Listener {
 
 
 
+
+
+
+
     }
-
-
 
 
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if (this.getConfig().getBoolean("setting.update-check") && player.hasPermission("more-command.update")) {
+            (new UpdateChecker(this, 109520)).getVersion((version) -> {
+                if (!this.getDescription().getVersion().equals(version)) {
+                    player.sendMessage(this.getConfig().getString("new-version").replace("%version%", version).replace("&", "§"));
+                }
 
-
-        if (getConfig().getBoolean("setting.update-check")){
-            // Проверяем, есть ли у игрока права на обновление плагина
-            if (player.hasPermission("more-command.update")) {
-                new UpdateChecker(this, 109520).getVersion(version -> {
-                    if (getDescription().getVersion().equals(version)) {
-
-                    } else {
-
-                        player.sendMessage(getConfig().getString("new-version").replace("%version%", version).replace("&", "§"));
-                        //player.sendMessage(ChatColor.GOLD + "Download - https://www.spigotmc.org/resources/more-command.109520/".replace("&", "§"));
-                    }
-                });
-            }
+            });
         }
 
-
-
-
     }
-
-
-
 
     @EventHandler
     public void onBlockRedstoneEvent(BlockRedstoneEvent e) {
@@ -144,7 +136,6 @@ public class More_command extends JavaPlugin implements Listener {
         }
 
     }
-
 
 
 }
