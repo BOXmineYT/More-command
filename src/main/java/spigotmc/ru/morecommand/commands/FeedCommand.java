@@ -6,7 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+
 import spigotmc.ru.morecommand.More_command;
 
 public class FeedCommand implements CommandExecutor {
@@ -17,7 +17,7 @@ public class FeedCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(CommandSender sender,Command command,String label,String[] args) {
         if (plugin.getConfig().getBoolean("setting.feed")) {
             if(!sender.hasPermission(plugin.getConfig().getString("permissions.feed"))) {
                 String s = ChatColor.translateAlternateColorCodes('&',

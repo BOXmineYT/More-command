@@ -1,7 +1,8 @@
 name: More-command
 version: '${project.version}'
 main: spigotmc.ru.morecommand.More_command
-api-version: 1.14
+api-version: 1.16
+author: BOXmineYT
 commands:
   mc:
     description: Основная команда плагина
@@ -15,3 +16,4 @@ commands:
     description: Обьявление на весь сервер
   flyeffect:
     description: Пошутить над игроком левитацией
+  more-command:

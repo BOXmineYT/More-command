@@ -1,6 +1,8 @@
 version: 1.9 #Пожалуйста не трогайте эту строчку!
 
-new-version: '&a[More-command] A new version of the plugin has been released. version: %version% &6Download - https://www.spigotmc.org/resources/more-command.109520/ '
+new-version:
+  - '&a[More-command] Выла новая версия плагина версия: %version% '
+  - '&6Скачать - spigotmc.org/resources/more-command.109520/'
 
 # в этом разделе вы можете отключать функции плагина
 setting:
@@ -21,7 +23,7 @@ messages:
   NoPermisionfeed: '&cУ вас нет прав!'
   NoPermisionconsole: '&cЭту команду могут использовать только игроки!'
   dontplayerfeed: '&cИгрок не найден!'
-  bc-message: '&eОбьявление&7 %player_name%: '
+  bc-message: '&eОбьявление&7 %player_name%: %broadcast%'
   NoPermisionbc: '&cУ вас нет прав!'
   Dontmessagebc: '&cПожалуйста напишите хотябы одну букву!'
   flyeffect: 'Ой! Пора в полет!'
@@ -35,6 +37,8 @@ messages:
   NoPermisiongm: '&cУ вас нет прав!'
   gmdongame: '&cНедопустимый режим игры!'
   NoPermisionstop: '&cУ вас нет прав!'
+  nopermissionstop: '&cУ вас нет прав!'
+  ProblemUpdateCheker: 'Ошибка при проверке версии плагина'
 plugin:
   Reloadplugin: '&aПлагин перезагружен!'
   NoPermisionreload: '&cУ вас нет прав!'
@@ -52,3 +56,23 @@ permissions:
   flyeffect.others: 'more-command.flyeffect.others'
   gm: 'more-command.gm'
   stop: 'more-command.stop'
+
+menustop:
+  endable: true #если значение true то при попытки отсановки плагина появится меню, если же false то плагин сразу выключится
+  title: 'Точно хотите выключать плагин?'
+  NoPredmet: GREEN_WOOL
+  TitleNoPredmet: 'Нет'
+  YesPredmet: RED_WOOL
+  TitleYesPredmet: 'Да'
+
+#список команды плагина
+help:
+  - '&6/mc help &2- Помощь по плагину'
+  - '&6/more-command stop &2- Выключает плагин'
+  - '&6/mc reload &2- Перезагрузка плагина'
+  - '&6/heal &2- Полное востоновление здоровья'
+  - '&6/gm &2- Изменить режим игры'
+  - '&6/feed &2- Полное востоновление голода'
+  - '&6/bc &2- Объявления на весь сервер'
+  - '&6/flyeffect &2- Выдать игроку левитацию чтоб его затролить'
+

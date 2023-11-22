@@ -1,17 +1,24 @@
 package spigotmc.ru.morecommand;
 
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.TrapDoor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import spigotmc.ru.morecommand.commands.*;
-import spigotmc.ru.morecommand.tools.LanguageManager;
 import spigotmc.ru.morecommand.tools.UpdateChecker;
 import java.io.File;
 import java.util.ArrayList;
@@ -32,11 +39,33 @@ public class More_command extends JavaPlugin implements Listener  {
 
     String configVersion = getConfig().getString("version");
 
+    private Inventory stopmenu;
+
 
 
 
     @Override
     public void onEnable() {
+
+
+        stopmenu = Bukkit.createInventory(null, 9, getConfig().getString("menustop.title"));
+        // Добавление предметов в меню
+        ItemStack redWool = new ItemStack(Material.valueOf(getConfig().getString("menustop.YesPredmet")));
+        ItemMeta redWoolMeta = redWool.getItemMeta();
+        redWoolMeta.setDisplayName(getConfig().getString("menustop.TitleYesPredmet"));
+        redWool.setItemMeta(redWoolMeta);
+        stopmenu.setItem(3, redWool);
+
+        ItemStack greenWool = new ItemStack(Material.valueOf(getConfig().getString("menustop.NoPredmet")));
+        ItemMeta greenWoolMeta = greenWool.getItemMeta();
+        greenWoolMeta.setDisplayName(getConfig().getString("menustop.TitleNoPredmet"));
+        greenWool.setItemMeta(greenWoolMeta);
+        stopmenu.setItem(5, greenWool);
+
+
+
+
+
 
 
 
@@ -81,6 +110,7 @@ public class More_command extends JavaPlugin implements Listener  {
         getCommand("bc").setExecutor(new BCcommand(this));
         getCommand("flyeffect").setExecutor(new Flyeffect(this));
         getCommand("mc").setExecutor(new MainCommand(this));
+        getCommand("more-command").setExecutor(this);
         getCommand("gm").setExecutor(new GMCommand(this));
         this.getServer().getPluginManager().registerEvents(this, this);
 
@@ -94,6 +124,7 @@ public class More_command extends JavaPlugin implements Listener  {
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.reload")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.help")));
         this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.gm")));
+        this.getServer().getPluginManager().addPermission(new Permission(getConfig().getString("permissions.stop")));
         this.getServer().getPluginManager().addPermission(new Permission("more-command.update"));
 
 
@@ -103,7 +134,63 @@ public class More_command extends JavaPlugin implements Listener  {
 
 
 
+
+
+
+
+
     }
+
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("more-command") && args.length > 0 && args[0].equalsIgnoreCase("stop")) {
+            if(sender.hasPermission("permissions.stop")) {
+                if(this.getConfig().getBoolean("menustop.endable")) {
+                    if (sender instanceof Player) {
+                        Player player = (Player) sender;
+                        player.openInventory(stopmenu);
+                        return true;
+                    }
+                } else {
+                    sender.sendMessage("Plugin Disabled");
+                    Bukkit.getPluginManager().disablePlugin(this);
+                    return true;
+
+                }
+            }
+            sender.sendMessage(getConfig().getString("messages.nopermissionstop"));
+            return false;
+        }
+        return false;
+    }
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getInventory().equals(stopmenu)) {
+            Player player = (Player) event.getWhoClicked();
+            ItemStack clickedItem = event.getCurrentItem();
+
+            if (clickedItem != null && clickedItem.hasItemMeta()) {
+                ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+
+                // Проверка нажатого предмета
+                if (clickedItemMeta.getDisplayName().equals(getConfig().getString("menustop.TitleYesPredmet"))) {
+                    event.setCancelled(true); // Отменяем перемещение предмета в инвентаре игрока
+                    player.closeInventory(); // Закрываем меню
+                    player.sendMessage("Plugin Disabled");
+                    Bukkit.getPluginManager().disablePlugin(this);
+                } else if (clickedItemMeta.getDisplayName().equals(getConfig().getString("menustop.TitleNoPredmet"))) {
+                    event.setCancelled(true);
+                    player.closeInventory();
+                }
+            }
+        }
+    }
+
+
+
+
+
 
 
 
@@ -113,13 +200,18 @@ public class More_command extends JavaPlugin implements Listener  {
         if (this.getConfig().getBoolean("setting.update-check") && player.hasPermission("more-command.update")) {
             (new UpdateChecker(this, 109520)).getVersion((version) -> {
                 if (!this.getDescription().getVersion().equals(version)) {
-                    player.sendMessage(this.getConfig().getString("new-version").replace("%version%", version).replace("&", "§"));
+                    List<String> messageList = getConfig().getStringList("new-version");
+                    for (String message : messageList) {
+                        message = message.replace("%version%", version).replace("&", "§");
+                        player.sendMessage(message);
+                    }
                 }
 
             });
         }
 
     }
+
 
     @EventHandler
     public void onBlockRedstoneEvent(BlockRedstoneEvent e) {
